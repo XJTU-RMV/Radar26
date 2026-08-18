@@ -1,6 +1,4 @@
-# Radar26
-
-西安交通大学笃行战队 RoboMaster 2026 雷达站代码。
+<h1 align="center">笃行雷达 2026</h1>
 
 本项目面向 RoboMaster 2026 赛季雷达站，覆盖赛场目标定位、信息波/干扰波解调、裁判系统通信、激光反制控制和雷达站可视化界面。代码以实车/实场地部署为目标，默认运行环境为 Linux + conda `lidar` 环境，核心配置集中在 `config/params.yaml`。
 

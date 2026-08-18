@@ -26,7 +26,7 @@ from lisar.common.tracking_behavior import (
 )
 from lisar.difficulty.model_detector import Yolo26TargetDetector, load_stage3_detector_config
 from lisar.easy.cv_detector import CvModuleTargetDetector, draw_cv_detection, erase_module_bars
-from lisar.stage3 import CountermeasureDifficultyTracker
+from lisar.common.difficulty_tracker import CountermeasureDifficultyTracker
 from lisar.utils.get_angle import cal_angle
 
 
