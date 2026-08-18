@@ -1,0 +1,19 @@
+filterpy==1.4.5
+loguru==0.7.3
+matplotlib==3.10.8
+numpy==1.24.0
+open3d_cpu==0.19.0+72ee789
+Pillow==12.1.1
+pmt==0.0.4
+PyQt5==5.15.11
+PyQt5_sip==12.17.0
+pyserial==3.5
+PyYAML==6.0.3
+scikit_learn==1.8.0
+scipy==1.17.1
+seaborn==0.13.2
+sip==6.10.0
+torch==2.0.0+cu118
+torchvision==0.15.1+cu118
+tqdm==4.67.3
+-e ./model/yolo26

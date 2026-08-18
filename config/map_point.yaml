@@ -1,0 +1,53 @@
+field:
+  x_range_m: 28.0
+  y_range_m: 15.0
+  map_path: config/field/RM2026Map.png
+points:
+- name: R1_strike_region
+  faction: red
+  center:
+  - 5.5201
+  - 12.5433
+  radius_m: 2.3641
+- name: B1_strike_region
+  faction: blue
+  center:
+  - 22.4799
+  - 2.4567
+  radius_m: 2.3641
+- name: R2_redeem_region
+  faction: red
+  center:
+  - 12.3322
+  - 8.7874
+  radius_m: 1.9905
+- name: B2_redeem_region
+  faction: blue
+  center:
+  - 15.6678
+  - 6.2126
+  radius_m: 1.9905
+- name: R_defense_region
+  faction: red
+  center:
+  - 6.5772
+  - 7.5354
+  radius_m: 1.4005
+- name: B_defense_region
+  faction: blue
+  center:
+  - 21.4228
+  - 7.4646
+  radius_m: 1.4005
+- name: R_outpost_region
+  faction: red
+  center:
+  - 10.8993
+  - 3.685
+  radius_m: 1.234
+- name: B_outpost_region
+  faction: blue
+  center:
+  - 17.1007
+  - 11.315
+  radius_m: 1.234

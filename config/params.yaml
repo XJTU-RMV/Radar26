@@ -1,0 +1,140 @@
+# 1.基本配置
+faction: "red"
+enable_vision_localization: false # 是否开启主相机视觉定位；false 时只用信息波坐标
+use_sub_camera: true
+enable_referee: true
+enable_laser_tracking: true
+enable_demod: true # 是否开启解调信息波
+
+referee:
+  port: /dev/ttyUSB0
+  baudrate: 115200
+  double_vulnerability_trigger_after_start_seconds: [60, 120] # 第1/2次双倍易伤分别在开局后多少秒允许触发
+  radar2robot:
+    enabled: true # 是否周期性给己方机器人发送雷达位置/状态；不影响0x0305裁判客户端坐标和密钥/双倍易伤控制消息
+    receivers: ["all"] # all / hero / engineer / infantry3 / infantry4 / drone / sentry
+    send_location: false
+    send_status: true
+    batch_interval: 0.7
+    tx_interval: 0.1
+  radar2client:
+    tx_interval: 0.1 # 雷达 -> 裁判系统坐标发送周期，0.2s = 5Hz，符合 0x0305 频率上限
+
+initiative_counter: false # true: 按 countermeasure_start_seconds 或飞镖信号分次反制；false: 开局直接持续反制
+countermeasure_start_seconds: # initiative_counter=true 时，第1~5次反制分别在开局后多少秒启动
+  - 0
+  - 0
+  - 0
+  - 180
+  - 180
+record_main: false # 启动录制能压一半帧率fule
+record_sub: true
+
+demod: # 解调信息波
+  listen_host: 0.0.0.0
+  listen_port: 9999
+  target_level: 3
+  decode_timeout: 30.0 # 解调密钥超时时间，和 RX/AGENTS.md 中 30s 设计一致
+  demod_timeout: 1.0 # 解调位置结果超时时间
+
+use_video: false
+video_path: "/home/wtz/record/main/saved_videos_2026-05-28_10-14-56.141/main_2026-05-28_10-14-56.213.mp4"
+
+device: "cuda"
+class_names: ["R1", "R2", "R3", "R4", "R7", "B1", "B2", "B3", "B4", "B7", "RA", "BA"]
+
+# 2.射线投影
+transform:  # 2026RMUC地图
+  mesh_path: "config/field/RMUC2026_V1.2.0_copy_m.PLY"
+  keypoints_file: "config/keypoints/RMUC2026_keypoints.pp"
+  map_path: "config/field/RM2026Map.png"
+
+# 3.模型
+car_detector:
+  weights_path: "weights/car26.engine" # Path to the car detection model weights
+  img_size: 640
+  conf_thres: 0.2
+  iou_thres: 0.5
+  max_det: 10
+  tracker_config_path: "config/botsort.yaml" # Path to the tracker configuration file
+
+aircraft_detector:
+  weights_path: "weights/yolov12n-aircraft.engine"
+  img_size: 1280
+  conf_thres: 0.5
+  iou_thres: 0.5
+  max_det: 2
+  tracker_config_path: "config/botsort.yaml"
+
+armor_detector:
+  weights_path: "weights/armor26.engine"
+  digit_model_type: "mobilenet"
+  digit_weights_path: "weights/MobileNet_v3.1.pth"
+
+  use_enhanced_detector: true
+  armor_detector_type: "two_step" # three_step, three_step
+  img_size: 192
+
+  conf_thres: 0.5
+  iou_thres: 0.4
+  max_det: 1
+
+tracker:
+  point_guesser_config_path: "config/guess_pts.yaml"
+
+# 4.设备
+main_camera:
+  acquisition_rate: 19.0
+  exposure_time: 20000
+  gain: 23.0
+  width: 5472
+  height: 3648
+  format: "BayerGB8"
+
+  K: [4976.92311439, 0.00000000, 2763.73260644, 0.00000000, 4980.49260583, 1810.73007636, 0.00000000, 0.00000000, 1.00000000]
+  dist_coeffs: [-0.07533622, 0.36599668, -0.00230824, 0.00069054, -0.94992502]
+  R: [[-0.02010701, -0.99979778, 0.00033217], [-0.21100124, 0.00391871, -0.97747794], [0.97727897, -0.01972425, -0.21103736]]
+  t: [[-0.66059257], [0.52017388], [15.10514745]]
+
+  display_fps: true
+  recording_workers_num: 2
+  recording_save_root_dir: "/home/wtz/record/main"
+  #  K: [5095.63646121, 0.00000000, 2835.63863375, 0.00000000, 5088.27425924, 1876.69006513, 0.00000000, 0.00000000, 1.00000000]
+  # dist_coeffs: [-0.02363938, -0.05382641, 0.00492734, 0.00507192, 0.38192645]
+  
+sub_camera:
+  acquisition_rate: 80.0
+  exposure_time: 1000
+  gain: 20.0 # 最大就20
+  width: 3072
+  height: 2048
+  format: "BayerRG8"
+  gamma_enable: false
+  gamma: 1.0
+  stage3:
+    exposure_time: 7000
+    gain: 20.0
+    gamma_enable: true
+    gamma: 0.7
+  
+  K: [20741.710440, 0.00000000, 1576.57725459, 0.00000000, 21019.301758, 1201.87571021, 0.00000000, 0.00000000, 1.00000000] # 手调
+  # K: [22513.95458155, 0.00000000, 1576.57725459, 0.00000000, 22853.12148779, 1201.87571021, 0.00000000, 0.00000000, 1.00000000] # 初步标定
+  dist_coeffs: [-1.18400536, 125.60972961, -0.02606206, 0.02493162, 0.90045673]
+
+
+  display_fps: true
+  recording_workers_num: 2
+  recording_save_root_dir: "/home/wtz/record/sub"
+
+stage3_detector:
+  model_path: "weights/best.engine"
+  img_size: 640
+  conf_thres: 0.25
+  iou_thres: 0.45
+  max_det: 1
+  device: "cuda"
+
+gimbal: # 激光云台
+  use_serial: true
+  port: "/dev/ttyACM0"  # 根据实际连接修改
+  baudrate: 115200
