@@ -1,6 +1,6 @@
 <h1 align="center">笃行 2026 雷达 <img src="assets/radar-icon.svg" alt="雷达图标" width="32" height="32" /></h1>
 
-> 本仓库为西安交通大学笃行战队 RoboMaster 2026 赛季雷达代码，覆盖 1）视觉定位、2）无线电解调、3）激光反制控制、 4）兵种间通讯 四个模块。
+> 本仓库为西安交通大学笃行战队 RoboMaster 2026 赛季雷达代码，覆盖 1) 视觉定位、2) 无线电解调、3) 激光反制控制、 4) 兵种间通讯 四个模块。
 
 <p align="center">
   <img src="assets/xjtu_logo.jpg" width="300"/>
@@ -108,3 +108,15 @@ python -m tracker.detector --mode video --source /path/to/video.mp4
 # 按红方ID向英雄、工程、步兵、无人机、哨兵循环发送雷达状态消息
 python -m driver.referee.test_referee_comm --faction red
 ```
+## 技术文档
+有关反制和解调的具体方案详见我们的技术文档
+
+| 模块 | 文档 | 内容 |
+| --- | --- | --- |
+| 激光反制 | [反制技术方案](docs/反制.md) | 坐标建模、激光点定位、检测模块识别、非同轴控制与绝对角滤波 |
+| 无线电解调 | [解调技术方案](docs/西安交通大学解调信息波项目开源.docx) | 由硬件组王柏瑜贡献 |
+
+## 联系方式
+解调：2804658408@qq.com
+
+其余：2537661286@qq.com

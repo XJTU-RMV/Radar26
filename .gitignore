@@ -48,9 +48,5 @@ lisar/outputs/*
 record_path/
 .agents/
 
-docs/*
-!docs/
-!docs/protocol_update_20260626.md
-
 darts/
 runs/
