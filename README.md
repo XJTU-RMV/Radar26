@@ -13,7 +13,6 @@
 - 裁判系统通信：`driver/referee/` 处理裁判系统串口协议、雷达小地图坐标发送、雷达自主决策和机器人交互数据。
 - 激光反制：`lisar/` 负责副相机激光检测模块识别、云台控制、阶段化搜索与第三阶段模型检测。
 - 可视化界面：`ui/` 提供雷达站运行状态、地图目标、解调状态、反制状态和标定入口的 PyQt 界面。
-- 离线验证与调试：`scripts/`、`callibrate/` 提供协议复核、热区可视化、相机标定和地图标定辅助脚本。
 
 ## 系统架构
 
@@ -140,35 +139,4 @@ python -m RX.run_demod --side red --level base
 
 `lisar/common/` 放置相机取流、云台控制、搜索状态和行为编排等共性组件；`lisar/easy/` 使用传统视觉方案；`lisar/difficulty/` 使用 YOLO26 模型方案处理更复杂阶段。
 
-## 开发与验证
 
-离线协议验证：
-
-```bash
-python scripts/verify_protocol_update_20260626.py
-```
-
-第三阶段反制验证脚本：
-
-```bash
-python scripts/test_referee_countermeasure_difficulty.py
-```
-
-热区效果可视化：
-
-```bash
-python scripts/visualize_hot_region_effect.py
-```
-
-实机验证建议按链路逐步进行：先相机取流和标定，再视觉定位，再 SDR 解调，再裁判系统串口，最后启用激光反制闭环。
-
-## 开源说明
-
-本仓库当前未附带独立 LICENSE 文件。若需要正式二次分发、商业使用或作为其他项目依赖，请先补充明确的开源许可证。
-
-外部贡献建议优先围绕以下方向：
-
-- 完善部署文档和硬件连接说明。
-- 将硬件相关路径、串口名和设备序列号配置化。
-- 增强离线协议测试和无硬件模拟测试。
-- 补充不同场地和不同相机组合下的标定流程。
