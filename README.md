@@ -2,16 +2,10 @@
 
 > 本仓库为西安交通大学笃行战队 RoboMaster 2026 赛季雷达代码，覆盖 1）视觉定位、2）无线电解调、3）激光反制控制、 4）兵种间通讯 四个模块。
 
-<table align="center">
-  <tr>
-    <td align="center" width="232">
-      <img src="assets/xjtu_logo.jpg" alt="XJTU Logo" height="196" />
-    </td>
-    <td align="center" width="232" bgcolor="#030303">
-      <img src="assets/DX_logo.png" alt="笃行 Logo" height="196" />
-    </td>
-  </tr>
-</table>
+<p align="center">
+  <img src="assets/xjtu_logo.jpg" width="300"/>
+  <img src="assets/DX_logo.png" width="300"/>
+</p>
 
 ## 项目结构
 
