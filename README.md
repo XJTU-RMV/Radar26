@@ -1,28 +1,17 @@
-<h1 align="center">笃行雷达 2026</h1>
+<h1 align="center">笃行 2026 雷达 <img src="assets/radar-icon.svg" alt="雷达图标" width="32" height="32" /></h1>
 
-本项目面向 RoboMaster 2026 赛季雷达站，覆盖赛场目标定位、信息波/干扰波解调、裁判系统通信、激光反制控制和雷达站可视化界面。代码以实车/实场地部署为目标，默认运行环境为 Linux + conda `lidar` 环境，核心配置集中在 `config/params.yaml`。
+> 本仓库为西安交通大学笃行战队 RoboMaster 2026 赛季雷达代码，覆盖 1）视觉定位、2）无线电解调、3）激光反制控制、 4）兵种间通讯 四个模块。
 
-> 本仓库为战队技术交流与复现用途代码，不代表 DJI 或 RoboMaster 官方实现。
-
-## 功能概览
-
-- 视觉定位：主相机识别地面机器人装甲板/车辆目标，通过相机外参和场地模型完成像素到赛场坐标的映射。
-- 信息波解调：`RX/` 封装 GNU Radio 生成的信息波、干扰波解调链路，解析坐标、状态、密钥等雷达无线链路消息。
-- 裁判系统通信：`driver/referee/` 处理裁判系统串口协议、雷达小地图坐标发送、雷达自主决策和机器人交互数据。
-- 激光反制：`lisar/` 负责副相机激光检测模块识别、云台控制、阶段化搜索与第三阶段模型检测。
-- 可视化界面：`ui/` 提供雷达站运行状态、地图目标、解调状态、反制状态和标定入口的 PyQt 界面。
-
-## 系统架构
-
-运行时主入口由 `main.py` 和 `main_event_loop.py` 组织，典型数据流如下：
-
-1. 主相机图像进入 `tracker/`，得到机器人类别和图像位置。
-2. `transform/` 根据相机内外参、场地模型和关键点配置，将像素位置投影到赛场坐标。
-3. `RX/` 从 SDR 解调信息波/干扰波，输出敌方状态、坐标和密钥信息。
-4. `main_event_loop.py` 融合视觉、解调和裁判系统状态，维护雷达站运行状态。
-5. `driver/referee/` 将小地图坐标、雷达状态、密钥验证和双倍易伤指令发送给裁判系统或己方机器人。
-6. `lisar/` 根据比赛阶段、裁判系统状态和副相机检测结果控制激光云台执行反制。
-7. `ui/` 读取运行状态并提供可视化监控和交互控制。
+<table align="center">
+  <tr>
+    <td align="center" width="232">
+      <img src="assets/xjtu_logo.jpg" alt="XJTU Logo" height="196" />
+    </td>
+    <td align="center" width="232" bgcolor="#030303">
+      <img src="assets/DX_logo.png" alt="笃行 Logo" height="196" />
+    </td>
+  </tr>
+</table>
 
 ## 项目结构
 
@@ -45,96 +34,83 @@
 ├── ui/                     # PyQt 雷达站监控界面
 ├── callibrate/             # 相机外参和地图点标定工具
 ├── model/                  # 模型封装与本地 YOLO26 代码
-├── weights/                # TensorRT / PyTorch 模型权重
-├── docs/                   # 协议映射与技术说明
-└── scripts/                # 离线验证和可视化脚本
+└── weights/                # TensorRT / PyTorch 模型权重
 ```
 
 ## 运行环境
+### 硬件条件
+- 主相机(广角): MV-CS200 +12mm镜头
+- 副相机(长焦): MV-CE060-10UC + 50mm镜头
+- 云台: 翎控6015
+- PlutoSDR
 
-建议在已配置硬件驱动的 Linux 主机上运行：
+| 上述硬件可根据自身情况替换，如电机品牌，我们也一并提供了其他电机(大疆、达妙)的底层驱动，由施辉翔贡献。
 
-- conda 环境：`lidar`
-- Python：建议 3.10 系列
-- CUDA / TensorRT：用于 `.engine` 模型推理
-- PyQt5：用于雷达站界面
-- GNU Radio / PlutoSDR：用于信息波和干扰波解调
-- 海康工业相机 SDK：用于主相机和副相机取流
-- 串口设备：用于裁判系统和激光云台通信
+### 依赖 
+- Ubuntu 22.04
+- Python：3.10
+- pyqt5
+- GNU Radio
 
-安装 Python 依赖：
+创建虚拟环境之后，首先安装所需基础 Python 依赖：
 
 ```bash
 conda activate lidar
 pip install -r requirements.txt
 ```
 
-不同工控机的 CUDA、TensorRT、相机 SDK、GNU Radio 和 SDR 驱动版本可能不同，部署时应先确认这些系统级依赖已经可用。
+GNU Radio比较特殊，pip中无对应软件源，所以我们通过conda-forge配置:
+```bash
+conda install -c conda-forge gnuradio gnuradio-iio libiio libad9361-iio
+```
+
+| 由于我们采用上下位机通讯，须在工控机上配置同样环境。
 
 ## 快速启动
 
 启动图形界面：
 
 ```bash
-conda activate lidar
 python -m ui.radar_monitor_window
 ```
 
-或使用仓库脚本：
+## 模块化
+我们为每个模块提供了便捷的单独测试脚本，比如：
 
+- 单独启动解调调试(需连接PlutoSDR并修改RX/pluto.py中的SDR编号为你实际使用的SDR)：
 ```bash
-bash start.sh
+# 可通过iio_info -s 查看SDR序列号
+DEFAULT_SIGNAL_SERIAL = " " # 解信息波
+DEFAULT_JAMMING_SERIAL = " " # 解干扰波
 ```
-
-直接启动主流程示例：
-
-```bash
-python main.py \
-  --faction red \
-  --enable_vision_localization \
-  --enable_laser_tracking \
-  --enable_referee \
-  --enable_demod
-```
-
-单独启动解调调试：
 
 ```bash
 python -m RX.run_demod --side red --level base
 ```
 
-常用运行开关也可以在 `config/params.yaml` 中配置，包括阵营、相机启用状态、裁判系统串口、解调监听端口、模型路径、相机内外参和反制策略。
+- 单独运行第三阶段反制(需连接副相机、云台，并确认`config/params.yaml`中的`sub_camera`、`gimbal`和`stage3_detector`配置正确)：
 
-## 关键配置
+```bash
+# 使用副相机实时取流并控制云台
+python -m lisar.difficulty.tracking_yolo26 --source sub --config config/params.yaml
 
-- `faction`：己方阵营，支持 `red` / `blue`。
-- `enable_vision_localization`：是否启用主相机视觉定位。
-- `enable_laser_tracking`：是否启用副相机激光反制链路。
-- `enable_referee`：是否启用裁判系统串口通信。
-- `enable_demod`：是否启用信息波/干扰波解调。
-- `main_camera` / `sub_camera`：相机采集参数、内参、畸变和录制配置。
-- `transform`：场地模型、地图图片和关键点配置。
-- `car_detector` / `armor_detector` / `stage3_detector`：检测模型路径和推理阈值。
-- `referee`：裁判系统串口、雷达小地图发送周期、机器人交互数据发送策略。
+# 使用录制视频离线调试检测效果；无云台版本
+python -m lisar.difficulty.tracking_yolo26_without_gimbal --source video --video-path /path/to/video.mp4 --config config/params.yaml
+```
 
-实场地部署前，应重新核对相机外参、场地关键点、模型权重路径、SDR 序列号、串口设备名和云台方向。
+- 单独跑视觉识别：
 
-## 技术模块
+```bash
+# 使用海康主相机实时识别
+python -m tracker.detector --mode camera
 
-### 视觉定位
+# 使用视频离线调试
+python -m tracker.detector --mode video --source /path/to/video.mp4
+```
 
-`tracker/` 负责目标检测、跟踪和短时滤波，`transform/` 负责把图像坐标转换为赛场坐标。标定相关工具位于 `callibrate/`，地图、关键点和场地图像位于 `config/`。
+- 测试兵种间通讯(需连接服务器和裁判系统串口，默认`/dev/ttyUSB0`)：
 
-### 信息波与干扰波
-
-`RX/` 保留 GNU Radio 生成代码来源，并在项目侧封装 headless 运行逻辑。`RX/protocol.py`、`RX/runtime.py`、`RX/receiver.py` 和 `RX/sender.py` 负责解析、运行、接收和转发解调结果。
-
-### 裁判系统协议
-
-`driver/referee/messages.py` 定义裁判系统消息结构，`referee_comm.py` 负责串口通信和业务状态维护。`docs/protocol_update_20260626.md` 记录了当前代码与 RoboMaster 2026 通信协议的主要映射关系。
-
-### 激光反制
-
-`lisar/common/` 放置相机取流、云台控制、搜索状态和行为编排等共性组件；`lisar/easy/` 使用传统视觉方案；`lisar/difficulty/` 使用 YOLO26 模型方案处理更复杂阶段。
-
-
+```bash
+# 按红方ID向英雄、工程、步兵、无人机、哨兵循环发送雷达状态消息
+python -m driver.referee.test_referee_comm --faction red
+```

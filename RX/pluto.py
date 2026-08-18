@@ -5,8 +5,8 @@ import subprocess
 from dataclasses import dataclass
 
 
-DEFAULT_SIGNAL_SERIAL = "03df62c27fcb392820d76aca77d3213038"
-DEFAULT_JAMMING_SERIAL = "03d760669013192125df686e980b01393d"
+DEFAULT_SIGNAL_SERIAL = "SN for signal" #解信息波
+DEFAULT_JAMMING_SERIAL = "SN for jamming" # 解干扰波
 
 
 @dataclass(frozen=True)

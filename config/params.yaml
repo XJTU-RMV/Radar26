@@ -38,7 +38,7 @@ demod: # 解调信息波
   demod_timeout: 1.0 # 解调位置结果超时时间
 
 use_video: false
-video_path: "/home/wtz/record/main/saved_videos_2026-05-28_10-14-56.141/main_2026-05-28_10-14-56.213.mp4"
+video_path: "/path/to/your/video.mp4"
 
 device: "cuda"
 class_names: ["R1", "R2", "R3", "R4", "R7", "B1", "B2", "B3", "B4", "B7", "RA", "BA"]
@@ -98,7 +98,7 @@ main_camera:
 
   display_fps: true
   recording_workers_num: 2
-  recording_save_root_dir: "/home/wtz/record/main"
+  recording_save_root_dir: "/path/to/record/main"
   #  K: [5095.63646121, 0.00000000, 2835.63863375, 0.00000000, 5088.27425924, 1876.69006513, 0.00000000, 0.00000000, 1.00000000]
   # dist_coeffs: [-0.02363938, -0.05382641, 0.00492734, 0.00507192, 0.38192645]
   
@@ -124,7 +124,7 @@ sub_camera:
 
   display_fps: true
   recording_workers_num: 2
-  recording_save_root_dir: "/home/wtz/record/sub"
+  recording_save_root_dir: "/path/to/record/sub"
 
 stage3_detector:
   model_path: "weights/best.engine"

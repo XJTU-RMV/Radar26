@@ -1,1 +1,0 @@
-python -m ui.radar_monitor_window
