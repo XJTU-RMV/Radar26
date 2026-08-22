@@ -258,7 +258,7 @@ class Yolo26TrackerWithoutGimbal:
 def parse_args():
     parser = argparse.ArgumentParser(description="difficulty: YOLO26 detection without gimbal control")
     parser.add_argument("--source", choices=["sub", "video"], default="sub")
-    parser.add_argument("--video-path", default=None)
+    parser.add_argument("--video-path", default="demo/demo.mp4")
     parser.add_argument("--config", default="config/params.yaml")
     parser.add_argument("--model", default=None)
     parser.add_argument("--img-size", type=int, default=None)

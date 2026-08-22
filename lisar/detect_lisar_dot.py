@@ -146,7 +146,7 @@ class LisarDotDetector:
 def main():
     parser = argparse.ArgumentParser(description="激光点检测调试")
     parser.add_argument("--source", choices=["video", "sub"], default="video")
-    parser.add_argument("--video-path", default="archive/camera.mp4")
+    parser.add_argument("--video-path", default="demo/demo.mp4")
     parser.add_argument("--config", default="config/params.yaml")
     args = parser.parse_args()
 

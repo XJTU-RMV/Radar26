@@ -195,7 +195,7 @@ def draw_lisar_module_result(img, result, font_scale=None, thickness=2):
 def main():
     parser = argparse.ArgumentParser(description="lisar detect module detect")
     parser.add_argument("--source", choices=["video", "sub"], default="video")
-    parser.add_argument("--video-path", default="archive/camera.mp4")
+    parser.add_argument("--video-path", default="demo/demo.mp4")
     parser.add_argument("--config", default="config/params.yaml")
     args = parser.parse_args()
 

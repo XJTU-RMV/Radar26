@@ -23,6 +23,7 @@ __pycache__
 /training_workspace
 
 # except for the following files
+!/demo/demo.mp4
 !/assets/*.jpg
 !/field/RMUC2025_Regional.PLY
 !/field/RMUC2025_National.PLY

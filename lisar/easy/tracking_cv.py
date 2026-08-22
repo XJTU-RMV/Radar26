@@ -492,7 +492,7 @@ def _build_laser_reference(args, config):
 def parse_args():
     parser = argparse.ArgumentParser(description="easy: 基于CV检测的激光反制测试")
     parser.add_argument("--source", choices=["sub", "video"], default="sub")
-    parser.add_argument("--video-path", default=None)
+    parser.add_argument("--video-path", default="demo/demo.mp4")
     parser.add_argument("--config", default="config/params.yaml")
     parser.add_argument("--laser-reference", choices=["observed", "calibrated"], default="observed")
     parser.add_argument("--calibrated-x", type=int, default=None)
